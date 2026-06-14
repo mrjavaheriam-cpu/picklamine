@@ -8,7 +8,16 @@ import json
 
 app = Flask(__name__)
 app.secret_key = 'super-secret-key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database_new.db'
+import os
+
+# مسیری که در Render به دیسک پایدار دادید (همان Mount Path)
+DB_MOUNT_PATH = '/data'   # اگر در Render مسیر دیگری نوشتید، آن را اینجا بنویسید
+
+if not os.path.exists(DB_MOUNT_PATH):
+    os.makedirs(DB_MOUNT_PATH)   # اگر مسیر وجود نداشت، بساز
+
+db_path = os.path.join(DB_MOUNT_PATH, 'database_new.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
