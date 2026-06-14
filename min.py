@@ -10,11 +10,12 @@ app = Flask(__name__)
 app.secret_key = 'super-secret-key'
 import os
 
-# مسیری که در Render به دیسک پایدار دادید (همان Mount Path)
-DB_MOUNT_PATH = '/data'   # اگر در Render مسیر دیگری نوشتید، آن را اینجا بنویسید
+DB_MOUNT_PATH = "data"
 
-if not os.path.exists(DB_MOUNT_PATH):
-    os.makedirs(DB_MOUNT_PATH)   # اگر مسیر وجود نداشت، بساز
+os.makedirs(DB_MOUNT_PATH, exist_ok=True)
+
+db_path = os.path.join(DB_MOUNT_PATH, "database_new.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{db_path}"
 
 db_path = os.path.join(DB_MOUNT_PATH, 'database_new.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
@@ -756,4 +757,7 @@ with app.app_context():
         db.session.commit()
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(
+        host='0.0.0.0',
+        port=int(os.environ.get('PORT', 5000))
+    )
