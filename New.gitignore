@@ -1,0 +1,21 @@
+# دیتابیس
+*.db
+*.sqlite
+
+# پوشه‌های موقت پایتون
+__pycache__/
+*.pyc
+*.pyo
+
+# محیط مجازی
+venv/
+env/
+ENV/
+
+# فایل‌های IDE
+.vscode/
+.idea/
+
+# فایل‌های سیستمی
+.DS_Store
+Thumbs.db
